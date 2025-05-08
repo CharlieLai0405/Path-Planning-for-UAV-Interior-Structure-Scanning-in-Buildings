@@ -1,0 +1,34 @@
+./slice "/home/wasn/Desktop/Project/charlie/Slice_flatten/data/result_Indoor_and_outdoor.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/output/slice_" 5
+./slice "/home/wasn/Desktop/Project/charlie/Slice_flatten/data/Indoor_and_outdoor.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/outside/slice_" 1
+./slice "/home/wasn/Desktop/Project/charlie/cloud_data/badminton_court_350000_wuyu_uni2_3.0.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/outside/slice_" 5
+./slice "/home/wasn/Desktop/Project/charlie/data/badminton_court.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/outside/slice_" 5
+
+
+./slice "/home/wasn/Desktop/Project/charlie/data/use_badminton_court_350000_wuyu_uni_3.0.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/outside/slice_" 1
+
+./slice "/home/wasn/Desktop/yuyu/Indoor_and_outdoor.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/new_outside/slice_" 1
+
+
+
+./slice "/home/wasn/Desktop/yuyu/KD_optimal/optimal_positions_KD_test.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/newnew_outside/slice_" 1
+
+./slice "/home/wasn/Desktop/Project/charlie/Slice_flatten/data/optimal_positions_dis_25.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/dis_25_inside/slice_" 1
+
+
+
+
+./slice "/home/wasn/Desktop/yuyu/Combine/data/KD_2000_dis1_1.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/KD_2000_dis1_1/slice_" 1
+
+./slice "/home/wasn/Desktop/yuyu/Combine/data/KD_2000_dis15_15.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/KD_2000_dis15_15/slice_" 1
+
+./slice "/home/wasn/Desktop/yuyu/KD_Downsample/data/KD_2000_dis2_1.pcd" "/home/wasn/Desktop/Project/charlie/Slice_flatten/KD_2000_dis2_1/slice_" 1
+
+
+
+
+
+
+
+
+
+

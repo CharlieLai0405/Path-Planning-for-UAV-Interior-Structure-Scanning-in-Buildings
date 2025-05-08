@@ -1,0 +1,3 @@
+/home/wasn/Desktop/Project/charlie/Slice_flatten/build/CMakeFiles/slice.dir
+/home/wasn/Desktop/Project/charlie/Slice_flatten/build/CMakeFiles/edit_cache.dir
+/home/wasn/Desktop/Project/charlie/Slice_flatten/build/CMakeFiles/rebuild_cache.dir

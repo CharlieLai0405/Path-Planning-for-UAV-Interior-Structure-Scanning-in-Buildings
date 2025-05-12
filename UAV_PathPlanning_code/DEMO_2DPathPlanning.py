@@ -9,7 +9,7 @@ import time
 
 start_time = time.time()
 
-# === 1. 讀取 PCD 檔案，並投影為 2D 平面 (障礙物) ===
+# 1. 讀取 PCD 檔案，並投影為 2D 平面 (障礙物) 
 #pcd_path = "/home/wasn/Desktop/Project/charlie/Slice_flatten/new_outside/slice_13.pcd"
 pcd_path = "/home/wasn/Desktop/Project/charlie/Slice_flatten/new_outside/slice_10.pcd"
 pcd = o3d.io.read_point_cloud(pcd_path)
@@ -19,7 +19,7 @@ points = np.asarray(pcd.points)
 x_coords = points[:, 0]
 y_coords = points[:, 1]
 
-# === 2. 設定解析度與計算 1:1 網格大小 ===
+# 2. 設定解析度與計算 1:1 網格大小 
 resolution = 0.1  # 每個網格代表 0.1m
 x_min, x_max = np.min(x_coords), np.max(x_coords)
 y_min, y_max = np.min(y_coords), np.max(y_coords)
@@ -30,7 +30,7 @@ grid_size_y = int((y_max - y_min) / resolution) + 1
 # 建立 2D 佔據網格 (0=自由, 1=障礙物)
 occupancy_grid = np.zeros((grid_size_y, grid_size_x), dtype=np.uint8)
 
-# === 3. 轉換障礙物點到 2D 網格 ===
+# 3. 轉換障礙物點到 2D 網格 
 x_scaled = ((x_coords - x_min) / resolution).astype(int)
 y_scaled = ((y_coords - y_min) / resolution).astype(int)
 
@@ -41,7 +41,7 @@ y_scaled = np.clip(y_scaled, 0, grid_size_y - 1)
 # 設定障礙物
 occupancy_grid[y_scaled, x_scaled] = 1  # 1 表示障礙物
 
-# === 4. 顯示 **原始** 障礙物地圖 ===
+# 4. 顯示 **原始** 障礙物地圖 
 plt.figure(figsize=(8, 8))
 plt.imshow(occupancy_grid, cmap="gray_r", origin="lower")  # 原始障礙物地圖
 plt.title("Original Occupancy Grid (Before Processing)")
@@ -49,12 +49,12 @@ plt.xlabel("X Axis (meters)")
 plt.ylabel("Y Axis (meters)")
 plt.show()
 
-# === 5. 修補邊界與漏洞 (膨脹 + 閉運算) ===
+# 5. 修補邊界與漏洞 (膨脹 + 閉運算) 
 kernel = np.ones((5, 5), np.uint8)  # 設定 Kernel 大小
 occupancy_grid_fixed = cv2.dilate(occupancy_grid, kernel, iterations=1)  # 先膨脹
 occupancy_grid_fixed = cv2.morphologyEx(occupancy_grid_fixed, cv2.MORPH_CLOSE, kernel, iterations=1)  # 再閉運算
 
-# === 6. 顯示 **修正後** 的障礙物地圖 ===
+# 6. 顯示 **修正後** 的障礙物地圖 
 plt.figure(figsize=(8, 8))
 plt.imshow(occupancy_grid_fixed, cmap="gray_r", origin="lower")  # 修正後的障礙物地圖
 plt.title("Fixed Occupancy Grid (After Dilation + Closing)")
@@ -62,7 +62,7 @@ plt.xlabel("X Axis (meters)")
 plt.ylabel("Y Axis (meters)")
 plt.show()
 
-# === 7. 讀取 Shooting Points (內部掃描點) ===
+# 7. 讀取 Shooting Points (內部掃描點) 
 #shooting_pcd_path = "/home/wasn/Desktop/Project/charlie/Slice_flatten/dis_25_inside/slice_10.pcd"
 #shooting_pcd_path = "/home/wasn/Desktop/Project/charlie/Slice_flatten/new_inside/slice_13.pcd"
 #shooting_pcd_path = "/home/wasn/Desktop/Project/charlie/Slice_flatten/newnew_inside/slice_6.pcd"
@@ -83,7 +83,7 @@ x_scaled_shooting = np.clip(x_scaled_shooting, 0, grid_size_x - 1)
 y_scaled_shooting = np.clip(y_scaled_shooting, 0, grid_size_y - 1)
 
 
-# === 8. 建立 KNN 邊並檢查障礙物 ===
+# 8. 建立 KNN 邊並檢查障礙物 
 num_points = len(shooting_points)
 x_shooting = shooting_points[:, 0]
 y_shooting = shooting_points[:, 1]
@@ -97,7 +97,7 @@ k = 5  # 每個點找最近 3 個鄰居
 nbrs = NearestNeighbors(n_neighbors=k+1, algorithm='ball_tree').fit(shooting_points[:, :2])  # 只用 XY 投影做鄰近
 distances, indices = nbrs.kneighbors(shooting_points[:, :2])
 
-# 新增：建立合法邊
+# 建立合法邊
 edges = []
 for i in range(num_points):
     for j in range(1, k+1):  # j=0 是自己，跳過
@@ -117,7 +117,7 @@ for i in range(num_points):
             continue
         edges.append((i, neighbor_idx, dist))
 
-# === 9. 使用 Kruskal 在合法邊中找出 MST ===
+# 9. 使用 Kruskal 在合法邊中找出 MST 
 import networkx as nx
 
 G = nx.Graph()
@@ -126,7 +126,7 @@ for i, j, dist in edges:
 
 MST = nx.minimum_spanning_tree(G)
 
-# === 10. 視覺化最終 MST 結果 ===
+# 10. 視覺化最終 MST 結果 
 plt.figure(figsize=(8, 8))
 plt.imshow(occupancy_grid_fixed, cmap="gray_r", origin="lower")
 plt.scatter(x_scaled_shooting, y_scaled_shooting, c='red', s=10, label="Shooting Points")

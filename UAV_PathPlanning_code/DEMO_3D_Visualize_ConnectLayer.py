@@ -7,9 +7,9 @@ from scipy.spatial.distance import euclidean
 from tqdm import tqdm
 import time
 import os
-import heapq  # --- 新增：A* 演算法需要用到
+import heapq  # A* 演算法
 import networkx as nx
-from sklearn.neighbors import NearestNeighbors  # 放最上面就好，一次即可
+from sklearn.neighbors import NearestNeighbors
 from pathlib import Path
 
 def dfs_with_backtracking(graph, points_3d, start_idx):
@@ -70,7 +70,7 @@ def apply_approx_knn(filtered_points, x_scaled_shoot, y_scaled_shoot, occupancy_
     return G
 
 
-# --- 新增：DFS Traversal (深度優先搜尋) 函數 ---
+# DFS Traversal (深度優先搜尋) 函數
 def dfs_traversal(graph, start):
     visited = set()
     order = []
@@ -83,7 +83,7 @@ def dfs_traversal(graph, start):
     dfs(start)
     return order
 
-# --- 新增：A* 演算法函數 ---
+# A* 演算法函數
 def astar(grid, start, goal):
     neighbors = [(-1, 0), (1, 0), (0, -1), (0, 1),
                  (-1, -1), (-1, 1), (1, -1), (1, 1)]
@@ -117,7 +117,7 @@ def astar(grid, start, goal):
                     heapq.heappush(open_set, (f_score, neighbor))
     return []
 
-# === 參數設定 ===
+# 參數設定
 resolution = 0.1
 layer_range = range(16)
 obstacle_dir = "/home/wasn/Desktop/Project/charlie/Slice_flatten/new_outside"
@@ -138,7 +138,7 @@ total_exec_time = 0.0   # 總執行時間
 
 for layer in tqdm(layer_range, desc="處理進度"):
     print(f"\n📂 [處理第 {layer} 層]")
-    start_time = time.time()  # ✅ 新增
+    start_time = time.time()
 
     obs_path = os.path.join(obstacle_dir, f"slice_{layer}.pcd")
     shoot_path = os.path.join(shooting_dir, f"slice_{layer}.pcd")
@@ -224,7 +224,7 @@ for layer in tqdm(layer_range, desc="處理進度"):
         continue
 
     
-    # 執行近似 KNN 建圖（取代暴力）
+    # 執行近似 KNN 建圖
     num_points = len(filtered_points)
 
     G = apply_approx_knn(
@@ -240,9 +240,9 @@ for layer in tqdm(layer_range, desc="處理進度"):
     total_length = sum(nx.get_edge_attributes(MST, 'weight').values())
     print(f"📏 MST 總長度: {total_length:.2f} 公尺")
 
-    end_time = time.time()  # ✅ 新增
+    end_time = time.time() 
     elapsed_time = end_time - start_time
-    print(f"⏱️ 執行時間：{elapsed_time:.2f} 秒")  # ✅ 新增
+    print(f"⏱️ 執行時間：{elapsed_time:.2f} 秒") 
 
     z_value =150.0 + layer * 1.0
     filtered_points_3d = np.hstack((filtered_points[:, :2], np.full((num_points, 1), z_value)))
@@ -281,7 +281,7 @@ if len(all_3d_points) > 0 and len(all_edges) > 0:
     obstacle_all.points = o3d.utility.Vector3dVector(np.vstack(all_obstacle_points))
     obstacle_all.paint_uniform_color([0, 0, 0])
 
-    # --- UAV 路徑整合（DFS + A* + Z 軸 transition） ---
+    # UAV 路徑整合（DFS + A* + Z 軸 transition）
     dfs_segments = []
     transition_segments_astar = []
     transition_segments_vertical = []
@@ -326,7 +326,7 @@ if len(all_3d_points) > 0 and len(all_edges) > 0:
             cand_pt_3d = data_next["points_3d"][candidate_idx]
             vertical_transition = [
                 [prev_end[0], prev_end[1], prev_end[2]],
-                cand_pt_3d.tolist()  # ✅ 直接抓有正確 Z 的點
+                cand_pt_3d.tolist()  # 直接抓有正確 Z 的點
             ]
 
 
@@ -363,7 +363,7 @@ if len(all_3d_points) > 0 and len(all_edges) > 0:
             all_edges.extend(seg_edges)
             point_offset += len(seg_filtered)
 
-        # 🛡️ 若沒有任何點，回傳空 LineSet 避免崩潰
+        # 若沒有任何點，回傳空 LineSet 避免崩潰
         if len(all_points) == 0 or len(all_edges) == 0:
             return o3d.geometry.LineSet()
 
@@ -381,8 +381,6 @@ if len(all_3d_points) > 0 and len(all_edges) > 0:
 
     print("\n📊 所有層總 MST 長度：{:.2f} 公尺".format(total_mst_length))
     print("⏱️ 所有層總執行時間：{:.2f} 秒".format(total_exec_time))
-
-        # === 匯出最終完整飛行路徑 ===
 
     # 收集所有飛行段，並過濾 z < 150 的點
     full_path = []
@@ -431,8 +429,8 @@ for geo in geometries:
 view_ctl = vis.get_view_control()
 view_ctl.set_lookat(center)
 view_ctl.set_zoom(0.5)  # 可以微調，越小越近
-view_ctl.set_front([0, 0, -1])  # (選擇性) 正上往下看
-view_ctl.set_up([0, 1, 0])      # (選擇性) Y軸朝上
+view_ctl.set_front([0, 0, -1])  # 正上往下看
+view_ctl.set_up([0, 1, 0])      # Y軸朝上
 
 # 顯示
 vis.run()

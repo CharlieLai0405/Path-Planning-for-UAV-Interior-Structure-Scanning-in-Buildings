@@ -1,0 +1,11 @@
+{
+    "slice_thickness": 2.0,
+    "offset": 1,
+  
+    "obstacle_raw_pcd": "/home/wasn/Desktop/Project/charlie/Slice_flatten/data/Indoor_and_outdoor.pcd",
+    "shooting_raw_pcd": "/home/wasn/Desktop/yuyu/UAV/merged_all_points.pcd",
+  
+    "obstacle_slice_dir": "/home/wasn/Desktop/Project/charlie/1_CHT_DEMO_VisualEveryLayer/new_outside",
+    "shooting_slice_dir": "/home/wasn/Desktop/Project/charlie/1_CHT_DEMO_VisualEveryLayer/merged_all_points"
+  }
+  

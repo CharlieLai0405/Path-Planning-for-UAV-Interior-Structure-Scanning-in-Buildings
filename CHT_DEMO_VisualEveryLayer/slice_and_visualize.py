@@ -2,17 +2,14 @@
 """
 slice_and_visualize.py
 ======================
-一鍵流程：
+流程：
 1. 讀取 config.json 參數
-2. (可選) 將 obstacle / shooting 原始點雲切層
+2. 將 obstacle / shooting 原始點雲切層
 3. 自動以 *所有 shooting slice* 的最小 Z 為 z_base
 4. 逐層 KNN + MST + 視覺化 (單層視窗 **保留**)
 5. 跨層 DFS / A* / 垂直連線，整合 UAV 路徑
 6. Open3D 顯示 3D 結果，並匯出 uav_path.txt
 
-⚠️ 只把「參數與 I/O」外部化，演算法本身完全照搬
-   ‑ slice.cpp → slice_point_cloud()
-   ‑ VisualEveryLayertest_path copy.py → 其他函式
 """
 
 from __future__ import annotations
@@ -375,8 +372,8 @@ def visualize_and_export(layer_info: Dict[int, Dict[str, Any]], full_path: np.nd
     work_dir.mkdir(parents=True, exist_ok=True)
     output_txt = work_dir / "uav_path.txt"
     np.savetxt(output_txt, full_path, fmt="%.6f", delimiter=" ")
-    print(f"✅ 路徑已匯出 {output_txt}")
-    print(f"📊 總 MST 長度: {total_len:.2f} m, ⏱️ 總時間: {total_time:.2f} s")
+    print(f"路徑已匯出 {output_txt}")
+    print(f"總 MST 長度: {total_len:.2f} m, ⏱️ 總時間: {total_time:.2f} s")
 
 # ---------------------------------------------------------------------------
 # Main
